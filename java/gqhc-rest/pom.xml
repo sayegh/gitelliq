@@ -1,0 +1,300 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>berlin.thinkbox</groupId>
+  <artifactId>gqhc-rest</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>GITELLIQ High-Command - REST and Admin Webapp</name>
+  <url></url>
+  <properties>
+
+    <!-- The version properties are for the purpose of an overview, but
+	 is a work in progress. In some cases we have explicitly 
+	 specified a more recent version than the dependencies (usually
+	 without any effect). But these have been retained, as it nails
+	 down the versions we are using. -->
+
+    <jersey.version>1.19</jersey.version>
+   <maven.compiler.source>1.8</maven.compiler.source>
+   <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <repositories>
+
+    <!-- Components for SimpleCaptcha and jCaptcha could be found in 
+	 these repositories - ->
+
+    <repository>	
+      <id>enonic</id>
+      <url>http://repo.enonic.com/public/</url>
+    </repository>
+    <repository>
+      <id>jahia</id>
+      <url>http://maven.jahia.org/maven2/</url>
+    </repository>
+    <!- - -->
+
+  </repositories>
+
+  <dependencies>
+
+    <dependency>
+      <groupId>com.github.cage</groupId>
+      <artifactId>cage</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <!-- jCaptcha still exists, but the published maven dependency
+	 has dependencies that don't exist . Downloaded the distribution
+	 and installed it locally. - ->
+
+    <dependency>
+      <groupId>com.octo.captcha</groupId>
+      <artifactId>jcaptcha-all</artifactId>
+      <version>1.0</version>
+    </dependency>
+    <!- - -->
+
+    <!-- SimpleCaptcha is in the enoics repository, and has the same
+         dependency problems as jCaptcha. - ->
+
+    <dependency>
+      <groupId>nl.captcha</groupId>
+      <artifactId>simplecaptcha</artifactId>
+      <version>1.2.1</version>
+    </dependency>
+    <!- - -->
+
+    <dependency>
+     <groupId>com.sun.jersey</groupId>
+     <artifactId>jersey-servlet</artifactId>
+     <version>${jersey.version}</version>
+    </dependency>
+    <dependency>
+     <groupId>com.sun.jersey</groupId>
+     <artifactId>jersey-json</artifactId>
+     <version>${jersey.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>${jersey.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.1-api</artifactId>
+      <version>1.0.2.Final</version>
+    </dependency>
+
+    <!-- Maybe we shoud consider updating at some point  ... - ->
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.2.2.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>5.2.2.Final</version>
+    </dependency>
+    <!- - -->
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+      <version>5.6.15.Final</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.6.15.Final</version>
+      <type>jar</type>
+    </dependency>
+
+    <!-- Using C3P0 for the connection pool as suggested by the
+         hibernate documentation. This hopefully resolves the problems
+         with the mySQL connection we have been seeing. 
+	 
+	 Explicitly specifying the most recent version of c3p0 here,
+	 as the hibernate artifact pulls in a slightly older version.
+	 This has fixes for logging - but configuring logging via
+	 $CATALINA_BASE/conf/logging.properties remains a problem. -->
+
+    <!-- dependency>
+      <groupId>com.mchange</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.5.5</version>
+    </dependency -->
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-c3p0</artifactId>
+      <version>5.6.15.Final</version>
+    </dependency>
+
+    <!-- MySQL Connector (JDBC) - tried newer version because of
+         problems with initial connection. The problem seems to be
+         caused by natting the port to a virtual-box -->
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>6.0.3</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.4</version>
+    </dependency>
+
+    <!-- Compiling -->
+    
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- Testing -->
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Not actually using mockito yet, all the tests run against
+         an in memory database -->
+
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <!-- <artifactId>mockito-all</artifactId> -->
+      <version>2.7.14</version>
+      <scope>test</scope>
+   </dependency>
+
+   <!-- The eclipse implementation of JPA seems to be very popular. We
+        are using hibernate because I googled examples of what I knew
+        from older projects. Unfortunately hibernate implements some
+	cool features that are not in the JPA spec, and I used them
+	without realising - so we are now tied to hibernate. - ->
+
+   <dependency>
+     <groupId>org.eclipse.persistence</groupId>
+     <artifactId>org.eclipse.persistence.jpa</artifactId>
+     <version>2.6.4</version>
+   </dependency>
+   <!- - -->
+   
+   <!-- HQSQLDB (HyperSQL) - Java SQL-DB with support for in-memory
+        databases. This is great for writing unit tests that run
+	against a database. (These are of course strictly speaking
+	not unit-tests) -->
+
+   <dependency>
+     <groupId>org.hsqldb</groupId>
+     <artifactId>hsqldb</artifactId>
+     <version>2.7.3</version>
+     <scope>test</scope>
+   </dependency>
+
+   <!-- If we want to use slf4j with nnate. This is fairly smooth
+        as it then finds log4j.proprties automatically. But ... I made
+        the decision to use java.util.logging (which now seems easiest
+        in TomCat) and so we don't see the gqhc logging.  
+	
+	To use java.util.logging, the system property
+	java.util.logging.config.file has to be set to the absolute
+	path of the properties file. E.g. in eclipse:
+	-D...file=${project_path}/src/test/resources/logging.properties)
+	- ->
+
+   <dependency>
+     <groupId>org.slf4j</groupId>
+     <artifactId>slf4j-log4j12</artifactId>
+     <version>1.6.1</version>
+     <scope>test</scope>
+   </dependency>
+   <!- - -->
+
+  </dependencies>
+
+  <build>
+    <finalName>gqhc</finalName>
+
+    <!-- The engine tests must be run in a specific order.  The tests
+         build on eachother and verify previous tests. This can be
+         done using suites. Currently using the FixMethodOrder
+         annotiation with an appropriate naming convention.
+         Configuring the plugin here, because I have multiple local
+         variants. -->
+
+    <plugins>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-surefire-plugin</artifactId>
+	<version>2.12.4</version>
+	<configuration>
+          <includes>
+	    <include>**/EngineTest.class</include>
+	    <!-- - ->
+		 <include>**/*Suite.class</include>
+	    <!- - -->
+          </includes>
+	</configuration>
+      </plugin>
+    </plugins>
+
+  </build>
+
+  <profiles>
+    <profile>
+      <id>no-demo</id>
+      <build>
+	<plugins>
+	  <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.3.2</version>
+            <configuration>
+              <webResources>
+		<resource>
+		  <directory>src/main/webapp.no-demo</directory>
+		</resource>
+              </webResources>
+            </configuration>
+	  </plugin>
+	</plugins>
+      </build>  
+    </profile>
+    <profile>
+      <id>dev</id>
+      <build>
+	<plugins>
+	  <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.4.0</version>
+            <configuration>
+              <webResources>
+		<resource>
+		  <directory>src/main/webapp.dev</directory>
+		</resource>
+              </webResources>
+            </configuration>
+	  </plugin>
+	</plugins>
+      </build>  
+    </profile>
+  </profiles>
+
+</project>
