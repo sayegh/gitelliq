@@ -3,114 +3,111 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              version="2.0">
 
-  <persistence-unit name="GQ-Central" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="GQ-Central" transaction-type="RESOURCE_LOCAL">
 
-    <!-- Note - deprecated:org.hibernate.ejb.HibernatePersistence -->
+        <!-- Note - deprecated:org.hibernate.ejb.HibernatePersistence -->
 
-    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-    <class>com.gitelliq.gqhc.registration.Engine</class>
-    <class>com.gitelliq.gqhc.registration.IpInterface</class>
-    <class>com.gitelliq.gqhc.registration.MqttUser</class>
+        <class>com.gitelliq.gqhc.registration.Engine</class>
+        <class>com.gitelliq.gqhc.registration.IpInterface</class>
+        <class>com.gitelliq.gqhc.registration.MqttUser</class>
 
-    <properties>
+        <properties>
 
-      <!-- Note MySQL 5 Dialect, and driver com.mysql.jdbc.Driver is now deprecated -->
+            <!-- Note MySQL 5 Dialect, and driver com.mysql.jdbc.Driver is now deprecated -->
 
-      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
-      <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
 
-      <property name="hibernate.show_sql" value="true"/>
-<!--       <property name="hibernate.connection.username" value="root"/> -->
-<!--       <property name="hibernate.connection.password" value="h96HU89C"/> -->
-      <property name="hibernate.connection.username" value="gqhcrest"/>
-      <property name="hibernate.connection.password" value="Jv#pXlnb17"/>
-<!--       <property name="hibernate.connection.username" value="mosquitto"/> -->
-<!--       <property name="hibernate.connection.password" value="Q!nvrebb!27"/> -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.connection.username" value="{gqhc.db.username}"/>
+            <property name="hibernate.connection.password" value="{gqhc.db.password}"/>
 
-      <!-- - ->
-	   JDBC URL: Specify a database (makes deleting easy) and a timezone - the
-	   server timezone is too general (apparently).
-      <!- - -->
+            <!-- - ->
+             JDBC URL: Specify a database (makes deleting easy) and a timezone - the
+             server timezone is too general (apparently).
+            <!- - -->
 
-      <property name="hibernate.connection.url" 
-		value="jdbc:mysql://127.0.0.1:3306/gq-central?serverTimezone=UTC"/>
-      <property name="hibernate.max_fetch_depth" value="3"/>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://127.0.0.1:3306/gq-central?serverTimezone=UTC"/>
+            <property name="hibernate.max_fetch_depth" value="3"/>
 
-      <!-- - ->
-	   This seems to work fine for our requirements
-      <!- - -->
-      
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <!-- - ->
+             This seems to work fine for our requirements
+            <!- - -->
 
-	<!--  -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
 
-	<property name="hibernate.c3p0.min_size" value="5"/>
-	<property name="hibernate.c3p0.max_size" value="20"/>
-	<property name="hibernate.c3p0.timeout" value="1800"/>
-	<property name="hibernate.c3p0.max_statements" value="50"/>
+            <!--  -->
 
-	<!--
-	    Still have problems with the connection - c3p0 is working,
-	    but at some point the pool is clogged. This setting cause
-	    an early timeout - preferable to waiting on an indefinite
-	    timeout. Also highlights the need for more error handling
-	    in the servlets and JSPs. Doesn't fix the problem of course.
-	    
-	    After adding the appropriate finally blocks, and adding
-	    a context listener to close the EM-factory, the problems
-	    see to have been eliminated. 
-	-->
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="1800"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
 
-	<property name="hibernate.c3p0.checkoutTimeout" value="5000"/>
+            <!--
+              Still have problems with the connection - c3p0 is working,
+              but at some point the pool is clogged. This setting cause
+              an early timeout - preferable to waiting on an indefinite
+              timeout. Also highlights the need for more error handling
+              in the servlets and JSPs. Doesn't fix the problem of course.
 
-	<!--
-	    This is stopping an apparent time-out problem I
-	    get when running locally against a virtual-box. This
-	    suppresses the error, because c3p0 has enough helper
-	    threads for the minimum number of connections it
-	    initially creates. I suspect the timeout is connected
-	    to the natted mysql port - because the mysql command
-	    line client hangs after it has successfully connected.
-	    But strange that the driver otherwise seems to work okay.
-	    
-	    <property name="hibernate.c3p0.numHelperThreads" value="5"/>
-	-->
+              After adding the appropriate finally blocks, and adding
+              a context listener to close the EM-factory, the problems
+              see to have been eliminated.
+          -->
 
-	<!-- <property name="hibernate.c3p0.statementCacheNumDeferredCloseThreads" -->
-	<!-- 	  value="1"/> -->
+            <property name="hibernate.c3p0.checkoutTimeout" value="5000"/>
+
+            <!--
+                This is stopping an apparent time-out problem I
+                get when running locally against a virtual-box. This
+                suppresses the error, because c3p0 has enough helper
+                threads for the minimum number of connections it
+                initially creates. I suspect the timeout is connected
+                to the natted mysql port - because the mysql command
+                line client hangs after it has successfully connected.
+                But strange that the driver otherwise seems to work okay.
+
+                <property name="hibernate.c3p0.numHelperThreads" value="5"/>
+            -->
+
+            <!-- <property name="hibernate.c3p0.statementCacheNumDeferredCloseThreads" -->
+            <!-- 	  value="1"/> -->
 
 
-    </properties>
-  </persistence-unit>
+        </properties>
+    </persistence-unit>
 
-  <persistence-unit name="Test-GQ-Central" transaction-type="RESOURCE_LOCAL">
 
-    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <persistence-unit name="Test-GQ-Central" transaction-type="RESOURCE_LOCAL">
 
-    <class>com.gitelliq.gqhc.registration.Engine</class>
-    <class>com.gitelliq.gqhc.registration.IpInterface</class>
-    <class>com.gitelliq.gqhc.registration.MqttUser</class>
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-    <properties>
+        <class>com.gitelliq.gqhc.registration.Engine</class>
+        <class>com.gitelliq.gqhc.registration.IpInterface</class>
+        <class>com.gitelliq.gqhc.registration.MqttUser</class>
 
-      <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
-      <property name="hibernate.show_sql" value="true"/>    
-      <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>    
-      <property name="hibernate.connection.url" value="jdbc:hsqldb:mem:howtodoinjava"/>    
-      <property name="hibernate.max_fetch_depth" value="3"/>
+        <properties>
 
-      <!-- - ->
-	   This makes hibernate try to create the schema on every request(?)
-	   Seems weird - so it only works if set to update (create makes
-	   it drop the tables - which blocks). Fine for the in memory
-	   tests I guess; but still kind of weird.
-      <!- - -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver"/>
+            <property name="hibernate.connection.url" value="jdbc:hsqldb:mem:howtodoinjava"/>
+            <property name="hibernate.max_fetch_depth" value="3"/>
 
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <!-- - ->
+             This makes hibernate try to create the schema on every request(?)
+             Seems weird - so it only works if set to update (create makes
+             it drop the tables - which blocks). Fine for the in memory
+             tests I guess; but still kind of weird.
+            <!- - -->
 
-    </properties>
-  </persistence-unit>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+
+        </properties>
+    </persistence-unit>
 
 
 </persistence>
